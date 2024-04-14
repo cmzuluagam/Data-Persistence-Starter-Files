@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
@@ -10,6 +8,7 @@ public class MainManager : MonoBehaviour
     public int LineCount = 6;
     public Rigidbody Ball;
 
+    public Text BestScoreText;
     public Text ScoreText;
     public GameObject GameOverText;
     
@@ -22,6 +21,7 @@ public class MainManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        this.BestScoreText.text = $"Best Score: {BestScoreManager.Instance.BestScore.Name}:{BestScoreManager.Instance.BestScore.Score}";
         const float step = 0.6f;
         int perLine = Mathf.FloorToInt(4.0f / step);
         
@@ -59,6 +59,11 @@ public class MainManager : MonoBehaviour
             {
                 SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
             }
+
+            if (Input.GetKeyDown(KeyCode.Escape))
+            {
+                SceneManager.LoadScene(0);
+            }
         }
     }
 
@@ -70,6 +75,8 @@ public class MainManager : MonoBehaviour
 
     public void GameOver()
     {
+        BestScoreManager.Instance.ReportScore(m_Points);
+
         m_GameOver = true;
         GameOverText.SetActive(true);
     }
